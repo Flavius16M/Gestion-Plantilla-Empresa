@@ -1,93 +1,123 @@
 # Gestión de Plantilla - Rotación de Personal
 
-Programa de consola en Java para registrar entradas y salidas de trabajadores en el Excel de rotación de personal del departamento de Calidad. El objetivo es que esto se haga en segundos en lugar de modificar el Excel a mano.
+Aplicación de escritorio desarrollada en Java (JavaFX) para la gestión de la rotación de personal en una plantilla de trabajo. El sistema permite registrar entradas y salidas de trabajadores y actualizar automáticamente un archivo Excel con la información organizada por fechas y periodos.
+
+El objetivo del programa es sustituir la edición manual del Excel por un sistema automatizado, rápido y menos propenso a errores.
 
 ---
 
-## Requisitos
+## Tecnología utilizada
 
-- Java 11 o superior
-- Maven 3.x (para compilar)
-
-Para comprobar que están instalados:
-```
-java -version
-mvn -version
-```
+- Java 21 (LTS)
+- JavaFX
+- Maven
+- jpackage (para generar ejecutable nativo de Windows)
 
 ---
 
-## Compilar el proyecto
+## Ejecutable (IMPORTANTE)
 
-Desde la carpeta raíz del proyecto (donde está el `pom.xml`):
+Este proyecto ya no se ejecuta desde consola.
 
-```
-mvn package
-```
+Se entrega como aplicación de escritorio:
 
-Esto genera el archivo `target/GestionPlantilla.jar` con todas las dependencias incluidas.
+- Ejecutable generado con jpackage
+- Tipo: app-image (aplicación portable)
+- No requiere instalación de Java en el equipo destino
 
----
+### Ejecución
 
-## Ejecutar el programa
+Abrir el archivo:
 
-En Windows, hacer doble clic en `ejecutar.bat`. Este archivo configura la consola para que los caracteres especiales (tildes, símbolos del menú) se vean bien.
-
-O desde la terminal:
-```
-java -jar target/GestionPlantilla.jar
-```
+GestionPlantilla.exe
 
 ---
 
-## Cómo funciona
+## Estructura del proyecto
 
-Al abrirlo la primera vez, el programa pide seleccionar el archivo Excel mediante una ventana del explorador de Windows (así no hay que escribir la ruta a mano y no hay problemas con nombres que tienen tildes). Esa ruta se guarda y no vuelve a pedirse.
-
-A partir de ahí, el menú tiene estas opciones:
-
-**1 - Entrada de trabajador**
-Pide las iniciales y la fecha del cambio. Si no se pone fecha, usa la de hoy. Añade una nueva fila al Excel con el trabajador incorporado al final de la lista.
-
-**2 - Salida de trabajador**
-Muestra la plantilla actual, pide las iniciales del que se va y la fecha. Elimina al trabajador y compacta la lista para que no queden huecos.
-
-**3 - Ver plantilla actual**
-Muestra por consola quién está en la plantilla en este momento sin modificar nada.
-
-**4 - Cambiar archivo Excel**
-Por si se mueve el archivo o se pasa el programa a otro ordenador.
+GestionPlantillaFinal/
+│
+├── src/                  Código fuente Java
+├── pom.xml              Configuración Maven
+├── target/              Archivos generados (no incluir en GitHub)
+├── dist_prod/           Ejecutable generado (jpackage)
 
 ---
 
-## Cómo actualiza el Excel
+## Compilación del proyecto (solo desarrollo)
 
-Cada vez que se registra un cambio, el programa:
+Para compilar el proyecto:
 
-1. Lee todos los registros existentes del Excel
+mvn clean package
+
+Genera el archivo .jar en la carpeta target/.
+
+---
+
+## Generación del ejecutable
+
+El ejecutable se genera con jpackage usando tipo:
+
+--type app-image
+
+Esto crea una aplicación independiente que incluye:
+
+- Ejecutable .exe
+- Runtime de Java incluido
+- Librerías necesarias
+- Estructura completa de ejecución
+
+---
+
+## Funcionamiento de la aplicación
+
+Al iniciar la aplicación:
+
+1. Se abre la interfaz gráfica (JavaFX)
+2. El usuario selecciona el archivo Excel
+3. El sistema guarda la ruta automáticamente
+
+---
+
+## Funcionalidades principales
+
+- Registro de entrada de trabajadores
+- Registro de salida de trabajadores
+- Visualización de plantilla actual
+- Cambio de archivo Excel
+- Actualización automática del Excel
+
+---
+
+## Funcionamiento interno del Excel
+
+Cada cambio en la plantilla:
+
+1. Lee el Excel completo
 2. Añade el nuevo registro
-3. Ordena todo por fecha
-4. Borra la zona de datos y la reescribe desde cero
+3. Ordena los datos cronológicamente
+4. Reescribe el archivo desde cero
 
-Esto hace que el Excel siempre quede ordenado cronológicamente aunque se introduzcan fechas antiguas o fuera de orden. Los bloques de año y trimestre se fusionan solos, se pintan las celdas de máximo (verde) y mínimo (naranja) de cada trimestre cerrado, y se calcula el % trimestral automáticamente.
+Esto garantiza:
 
----
-
-## Estructura del Excel generado
-
-| Col B    | Col C      | Col D       | Col E  | Col F      | Col G, H... |
-|----------|------------|-------------|--------|------------|-------------|
-| AÑO 2026 | 2T 2026    | % trimest.  | Fecha  | Nº personas | MA, GC...  |
-|          |            |             |        |            |             |
-
-- El año y el trimestre se fusionan verticalmente en todas sus filas
-- El % trimestral aparece cuando el trimestre ya ha terminado. El 20 de la fórmula es la media fija y se cambia a mano al cerrar el año
-- Las celdas sin trabajador se rellenan de gris (#d8d8d8)
+- Orden automático por fechas
+- Agrupación por año y trimestre
+- Cálculo automático de porcentajes trimestrales
+- Formato visual estructurado
 
 ---
 
-## Notas
+## Notas técnicas
 
-- El programa no borra el historial, solo añade registros nuevos y reordena
-- Las iniciales no distinguen mayúsculas/minúsculas al buscar
-- El archivo de configuración se guarda en `Documents/GestionPlantilla/config.properties`
+- La aplicación es independiente (no requiere Java instalado)
+- El runtime de Java está incluido en el ejecutable
+- Compatible con Windows
+- El archivo de configuración se guarda en:
+
+Documents/GestionPlantilla/config.properties
+
+---
+
+## Autor
+
+Proyecto desarrollado como aplicación de gestión interna para automatización de procesos administrativos.
