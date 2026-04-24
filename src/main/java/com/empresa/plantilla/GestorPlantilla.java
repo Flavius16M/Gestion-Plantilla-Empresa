@@ -36,6 +36,7 @@ public class GestorPlantilla {
     private Workbook workbook;
     private Sheet hoja;
     private String rutaCargada;
+    
 
     // Estilos del Excel definidos aquí arriba para reutilizarlos en cada fila que se escribe.
     // Es importante no crearlos dentro de un bucle porque Excel tiene un límite de estilos
@@ -50,6 +51,8 @@ public class GestorPlantilla {
     private CellStyle estiloGris;
     private CellStyle estiloVerde;
     private CellStyle estiloNaranja;
+    private List<String> plantillaActual = new ArrayList<>();
+    
 
     // Clase interna que representa una fila del Excel:
     // guarda la fecha del cambio y la lista completa de trabajadores en ese momento.
@@ -553,6 +556,7 @@ public class GestorPlantilla {
             c.setCellStyle(stNum);
         }
     }
+    
 
     // ── Métodos auxiliares ───────────────────────────────────────────────────
 
@@ -590,6 +594,7 @@ public class GestorPlantilla {
     private XSSFColor toXSSFColor(byte[] rgb) {
         return new XSSFColor(new java.awt.Color(rgb[0] & 0xFF, rgb[1] & 0xFF, rgb[2] & 0xFF), null);
     }
+    
 
     String getTrimestre(Date fecha) {
         Calendar cal = Calendar.getInstance();
@@ -631,4 +636,45 @@ public class GestorPlantilla {
         int b = Integer.parseInt(hex.substring(4, 6), 16);
         return new byte[]{(byte) r, (byte) g, (byte) b};
     }
+    public String getPlantillaComoTexto(String rutaExcel) {
+    try (FileInputStream fis = new FileInputStream(rutaExcel);
+         Workbook tempWorkbook = new XSSFWorkbook(fis)) {
+        
+        Sheet hoja = tempWorkbook.getSheetAt(0);
+        int ultimaFila = hoja.getLastRowNum();
+        
+        // Buscamos la última fila que tenga datos de personas (Columna F / índice 5)
+        Row filaDatos = null;
+        for (int i = ultimaFila; i >= 0; i--) {
+            Row r = hoja.getRow(i);
+            if (r != null && r.getCell(5) != null && r.getCell(5).getCellType() == CellType.NUMERIC) {
+                filaDatos = r;
+                break;
+            }
+        }
+
+        if (filaDatos == null) return "No se encontraron datos en el Excel.";
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("ESTADO ACTUAL DE LA PLANTILLA:\n");
+        sb.append("--------------------------------------------------\n");
+
+        int contador = 1;
+        // Las iniciales empiezan en la columna G (índice 6) en adelante
+        for (int c = 6; c < filaDatos.getLastCellNum(); c++) {
+            Cell celda = filaDatos.getCell(c);
+            if (celda != null && celda.getCellType() == CellType.STRING && !celda.getStringCellValue().trim().isEmpty()) {
+                sb.append(String.format("[%d] %s\n", contador++, celda.getStringCellValue()));
+            }
+        }
+        
+        sb.append("--------------------------------------------------\n");
+        sb.append("Total: " + (contador - 1) + " personas.");
+        return sb.toString();
+
+    } catch (Exception e) {
+        return "Error al leer el archivo: " + e.getMessage();
+    }
 }
+}
+
