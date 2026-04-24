@@ -1,2 +1,16 @@
+# Maven build
 target/
-**/*
+
+# jpackage output
+dist_prod/
+
+# IDEs
+.vscode/
+.idea/
+
+# Compilados Java
+*.class
+
+# Archivos empaquetados 
+*.jar
+*.exe
