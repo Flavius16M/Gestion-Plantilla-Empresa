@@ -2,20 +2,32 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" spacing="15.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.empresa.plantilla.MenuController">
+<StackPane xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.empresa.plantilla.MenuController">
    <children>
-      <Label text="Gestión de Plantilla.">
-         <font>
-            <Font name="Arial Rounded MT Bold" size="25.0" />
-         </font>
-      </Label>
-      <Button mnemonicParsing="false" onAction="#btnEntradaClick" text="Registrar Entrada" />
-      <Button mnemonicParsing="false" onAction="#btnSalidaClick" text="Registrar Salida" />
-      <Button mnemonicParsing="false" onAction="#btnVerPlantillaClick" text="Ver Plantilla Actual" />
-      <Button mnemonicParsing="false" onAction="#btnCambiarExcelClick" text="Cambiar Archivo Excel" />
+      <ImageView fitHeight="200.0" fitWidth="800.0" pickOnBounds="true">
+         <image>
+            <Image url="@images/logo_principal.png" />
+         </image>
+      </ImageView>
+      <VBox fx:id="root" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="253.0" prefWidth="800.0" spacing="15.0" style="-fx-background-image: url(&quot;/images/logoPrincipal.png&quot;);;">
+         <children>
+            <Label text="Gestión de Plantilla.">
+               <font>
+                  <Font name="Arial Rounded MT Bold" size="25.0" />
+               </font>
+            </Label>
+            <Button mnemonicParsing="false" onAction="#btnEntradaClick" text="Registrar Entrada" />
+            <Button mnemonicParsing="false" onAction="#btnSalidaClick" text="Registrar Salida" />
+            <Button mnemonicParsing="false" onAction="#btnVerPlantillaClick" text="Ver Plantilla Actual" />
+            <Button mnemonicParsing="false" onAction="#btnCambiarExcelClick" text="Cambiar Archivo Excel" />
+         </children>
+      </VBox>
    </children>
-</VBox>
+</StackPane>

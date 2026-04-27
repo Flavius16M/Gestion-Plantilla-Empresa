@@ -14,3 +14,5 @@ dist_prod/
 # Archivos empaquetados 
 *.jar
 *.exe
+
+src/main/resources/images/

@@ -3,6 +3,8 @@ package com.empresa.plantilla;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import java.io.File;
 import java.util.Optional;
@@ -158,4 +160,5 @@ private void mostrarVentanaTexto(String titulo, String contenido) {
     alert.getDialogPane().setContent(textArea);
     alert.showAndWait();
 }
+
 }
